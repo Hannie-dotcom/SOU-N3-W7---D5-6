@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Soumatome N3 Kanji - Tuần 7 (Ngày 5-6)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background: linear-gradient(rgba(255, 245, 247, 0.75), rgba(240, 220, 225, 0.85)),
+                        url('https://images.unsplash.com/photo-1522383225653-ed111181a951?q=80&w=1200&auto=format&fit=crop') center/cover no-repeat fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 12px;
+            overflow-x: hidden;
+        }
+
+        .sakura-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .petal {
+            position: absolute; background: #ffb7c5; border-radius: 15px 0 15px 0; opacity: 0.75;
+            filter: drop-shadow(0 2px 4px rgba(216, 90, 127, 0.2)); animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translate(0, -10px) rotate(0deg); opacity: 0.8; }
+            100% { transform: translate(80px, 105vh) rotate(360deg); opacity: 0; }
+        }
+
+        .app-card {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px;
+            padding: 20px 16px;
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 30px rgba(180, 100, 120, 0.15);
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Tiêu đề Căn Giữa Dàn Đều */
+        .main-title-block {
+            text-align: center;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            border-bottom: 2px dashed #f2d5db;
+        }
+        .main-title-sub {
+            font-size: 11px;
+            color: #b06d7e;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+        .main-title-kanji {
+            color: #d85a7f;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .header { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; color: #b06d7e; margin-bottom: 8px; }
+
+        /* Progress Bar */
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: #f2d5db;
+            border-radius: 10px;
+            margin-bottom: 14px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #e07a9e, #d85a7f);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        /* Setup Panel */
+        .setup-panel { display: flex; flex-direction: column; gap: 14px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 13px; font-weight: 700; color: #d85a7f; }
+        select {
+            width: 100%; padding: 12px; border: 1.5px solid #f2d5db; border-radius: 12px;
+            font-size: 15px; outline: none; background: #fff5f7; color: #3a2e30; font-weight: 600;
+        }
+
+        /* Question Card */
+        .question-card {
+            background: #fff5f7;
+            border-left: 4px solid #d85a7f;
+            padding: 24px 14px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .q-word { font-size: 32px; font-weight: 700; color: #3a2e30; word-break: break-all; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .opt-btn {
+            display: flex; align-items: center; justify-content: center; background: #ffffff;
+            border: 1.5px solid #f2d5db; color: #4a383b; padding: 14px 8px; border-radius: 12px;
+            font-size: 16px; font-weight: 700; cursor: pointer; text-align: center; line-height: 1.3;
+        }
+        .opt-btn:active { background: #fff0f3; border-color: #d85a7f; }
+        .opt-btn.correct { background: #e8f5e9 !important; border-color: #66bb6a !important; color: #2e7d32 !important; }
+        .opt-btn.wrong { background: #ffebee !important; border-color: #ef5350 !important; color: #c62828 !important; }
+
+        /* Explanation Box */
+        .explanation-box { background: #ffffff; border: 1px dashed #d85a7f; border-radius: 12px; padding: 12px; margin-top: 12px; }
+        .exp-title { font-size: 11px; font-weight: 700; color: #d85a7f; text-transform: uppercase; margin-bottom: 4px; }
+        .exp-detail { font-size: 15px; font-weight: 700; color: #3a2e30; margin-bottom: 6px; }
+        .exp-ex-jp { font-size: 14px; font-weight: 600; color: #d85a7f; margin-bottom: 2px; }
+        .exp-ex-vi { font-size: 13px; color: #666; line-height: 1.4; }
+
+        .feedback { display: none; margin-top: 14px; }
+        .btn-primary {
+            display: block; width: 100%; margin-top: 12px; background: linear-gradient(135deg, #e07a9e 0%, #d85a7f 100%);
+            color: white; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; text-align: center;
+        }
+
+        /* Result Screen */
+        .result-panel { display: none; text-align: center; padding: 10px 0; }
+        .result-icon { font-size: 50px; margin-bottom: 10px; }
+        .result-score { font-size: 22px; font-weight: 700; color: #d85a7f; margin-bottom: 8px; }
+        .result-msg { font-size: 14px; color: #555; margin-bottom: 20px; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+    <div class="sakura-container" id="sakura-box"></div>
+
+    <div class="app-card">
+        <!-- Tiêu đề Căn Giữa Dàn Đều -->
+        <div class="main-title-block">
+            <div class="main-title-sub">SOUMATOME N3</div>
+            <div class="main-title-kanji">🌸 KANJI 🌸</div>
+        </div>
+
+        <!-- Panel Cài đặt -->
+        <div class="setup-panel" id="setup-panel">
+            <div style="text-align:center; font-weight:700; color:#b06d7e; font-size:16px;">Tuần 7 ・ Ngày 5–6</div>
+            <div class="form-group">
+                <label>Số câu mỗi lượt</label>
+                <select id="select-count">
+                    <option value="10">10 câu</option>
+                    <option value="20" selected>20 câu</option>
+                    <option value="all">Tất cả (26 câu)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Dạng câu hỏi</label>
+                <select id="select-mode">
+                    <option value="kanji-to-reading">Kanji ➔ Cách đọc (Hiragana)</option>
+                    <option value="reading-to-kanji">Cách đọc (Hiragana) ➔ Kanji</option>
+                    <option value="mix" selected>Trộn 2 chiều ngẫu nhiên</option>
+                </select>
+            </div>
+            <button class="btn-primary" onclick="startGame()">Bắt đầu luyện tập ➔</button>
+        </div>
+
+        <!-- Panel Làm bài -->
+        <div id="game-panel" style="display: none;">
+            <div class="header">
+                <span id="q-count">Câu 1 / 20</span>
+                <span id="score-count">Điểm: 0</span>
+            </div>
+
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-fill"></div>
+            </div>
+
+            <div class="question-card">
+                <div class="q-word" id="q-word">農家</div>
+            </div>
+
+            <div class="options-grid" id="options-box"></div>
+
+            <div class="feedback" id="feedback">
+                <div id="result-status" style="font-weight: 700; text-align: center; font-size: 15px; margin-bottom: 8px;"></div>
+                <div class="explanation-box">
+                    <div class="exp-title">📌 Từ vựng & Đáp án chuẩn:</div>
+                    <div class="exp-detail" id="exp-detail"></div>
+                    <div class="exp-title">🌸 Ví dụ trong sách Soumatome:</div>
+                    <div class="exp-ex-jp" id="exp-ex-jp"></div>
+                    <div class="exp-ex-vi" id="exp-ex-vi"></div>
+                </div>
+                <button class="btn-primary" onclick="nextQuestion()">Câu tiếp theo ➔</button>
+            </div>
+        </div>
+
+        <!-- Panel Kết quả chúc mừng -->
+        <div class="result-panel" id="result-panel">
+            <div class="result-icon">🎉</div>
+            <div style="font-weight: 700; color: #3a2e30; font-size: 18px;">HOÀN THÀNH BÀI HỌC!</div>
+            <div class="result-score" id="final-score">0 / 200 ĐIỂM</div>
+            <div class="result-msg" id="final-msg">Chúc mừng bạn đã hoàn thành xuất sắc từ vựng Soumatome N3 Tuần 7 Ngày 5–6!</div>
+            <button class="btn-primary" onclick="resetSetup()">Luyện tập lại ↺</button>
+        </div>
+    </div>
+
+    <script>
+        function createPetal() {
+            const box = document.getElementById('sakura-box');
+            if(!box) return;
+            const p = document.createElement('div');
+            p.classList.add('petal');
+            p.style.width = Math.random() * 6 + 6 + 'px';
+            p.style.height = Math.random() * 8 + 8 + 'px';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDuration = Math.random() * 3 + 5 + 's';
+            box.appendChild(p);
+            setTimeout(() => p.remove(), 8000);
+        }
+        setInterval(createPetal, 500);
+
+        // Dữ liệu chuẩn từ Soumatome N3 Kanji Tuần 7 Ngày 5 (Agriculture & Fishing) & Ngày 6 (Commerce & Industry)
+        const rawData = [
+            { kanji: "農家", reading: "のうか", hanviet: "NÔNG GIA", meaning: "nông dân, nhà nông", exJp: "農家で新鮮な野菜を買う。", exVi: "Mua rau tươi ở nhà nông." },
+            { kanji: "農業", reading: "のうぎょう", hanviet: "NÔNG NGHIỆP", meaning: "ngành nông nghiệp", exJp: "地域の農業を che 展させる。", exVi: "Phát triển ngành nông nghiệp của địa phương." },
+            { kanji: "農民", reading: "のうみん", hanviet: "NÔNG DÂN", meaning: "nông dân, người làm nông", exJp: "農民たちが畑で働く。", exVi: "Các nông dân đang làm việc trên cánh đồng." },
+            { kanji: "農薬", reading: "のうやく", hanviet: "NÔNG DƯỢC", meaning: "thuốc trừ sâu, thuốc bảo vệ thực vật", exJp: "無農薬の野菜を選ぶ。", exVi: "Chọn loại rau không dùng thuốc trừ sâu." },
+            { kanji: "漁業", reading: "ぎょぎょう", hanviet: "NGƯ NGHIỆP", meaning: "ngành ngư nghiệp, đánh bắt cá", exJp: "沿岸で漁業を営む。", exVi: "Kinh doanh ngành đánh bắt cá ven bờ." },
+            { kanji: "漁師", reading: "りょうし", hanviet: "NGƯ SƯ", meaning: "ngư dân", exJp: "漁師が朝早く海へ出る。", exVi: "Ngư dân ra biển từ sớm tinh mơ." },
+            { kanji: "漁船", reading: "ぎょせん", hanviet: "NGƯ THUYỀN", meaning: "tàu đánh cá", exJp: "港に多くの漁船が停泊している。", exVi: "Có nhiều tàu đánh cá đang neo đậu ở cảng." },
+            { kanji: "漁る", reading: "あさる", hanviet: "NGƯ", meaning: "tìm kiếm, lục lùng", exJp: "古本屋で珍しい本を漁る。", exVi: "Lùng tìm những cuốn sách hiếm ở cửa hàng sách cũ." },
+            { kanji: "商業", reading: "しょうぎょう", hanviet: "THƯƠNG NGHIỆP", meaning: "thương nghiệp, thương mại", exJp: "商業都市として栄える。", exVi: "Hưng thịnh với tư cách là một thành phố thương mại." },
+            { kanji: "商品", reading: "しょうひん", hanviet: "THƯƠNG PHẨM", meaning: "hàng hóa, sản phẩm", exJp: "新商品を開発する。", exVi: "Phát triển sản phẩm mới." },
+            { kanji: "商売", reading: "しょうばい", hanviet: "THƯƠNG MẠI", meaning: "buôn bán, kinh doanh", exJp: "家族で商売を始める。", exVi: "Cả gia đình bắt đầu việc buôn bán." },
+            { kanji: "商社", reading: "しょうしゃ", hanviet: "THƯƠNG XÃ", meaning: "công ty thương mại", exJp: "商社に就職して海外と giao 渉する。", exVi: "Vào làm ở công ty thương mại và đàm phán với nước ngoài." },
+            { kanji: "工業", reading: "こうぎょう", hanviet: "CÔNG NGHIỆP", meaning: "ngành công nghiệp", exJp: "工業地帯に工場が並ぶ。", exVi: "Các nhà máy xếp hàng dài ở khu công nghiệp." },
+            { kanji: "工場", reading: "こうじょう", hanviet: "CÔNG TRƯỜNG", meaning: "nhà máy, xưởng", exJp: "自動車の工場で見学する。", exVi: "Tham quan tại nhà máy sản xuất ô tô." },
+            { kanji: "工学", reading: "こうがく", hanviet: "CÔNG HỌC", meaning: "ngành kỹ thuật, công học", exJp: "大学で電気工学を学ぶ。", exVi: "Học ngành kỹ thuật điện ở đại học." },
+            { kanji: "工事", reading: "こうじ", hanviet: "CÔNG SỰ", meaning: "công trình, thi công", exJp: "道路の工事が行われている。", exVi: "Công trình làm đường đang được tiến hành." },
+            { kanji: "建設", reading: "けんせつ", hanviet: "KIẾN THIẾT", meaning: "xây dựng, kiến thiết", exJp: "新しいビルを建設する。", exVi: "Xây dựng tòa nhà mới." },
+            { kanji: "建築", reading: "けんちく", hanviet: "KIẾN TRÚC", meaning: "kiến trúc, xây dựng", exJp: "有名建築家の作品を見る。", exVi: "Xem tác phẩm của kiến trúc sư nổi tiếng." },
+            { kanji: "建てる", reading: "たてる", hanviet: "KIẾN", meaning: "xây dựng", exJp: "自分の家を建てるのが夢だ。", exVi: "Xây nhà cho riêng mình là một giấc mơ." },
+            { kanji: "建物", reading: "たてもの", hanviet: "KIẾN VẬT", meaning: "tòa nhà, công trình", exJp: "歴史的な建物を保存する。", exVi: "Bảo tồn tòa nhà mang tính lịch sử." },
+            { kanji: "設立する", reading: "せつりつする", hanviet: "THIẾT LẬP", meaning: "thành lập, thiết lập", exJp: "新しい会社を設立する。", exVi: "Thành lập công ty mới." },
+            { kanji: "設定する", reading: "せっていする", hanviet: "THIẾT ĐỊNH", meaning: "thiết lập, cài đặt", exJp: "エアコンの温度を設定する。", exVi: "Cài đặt nhiệt độ của điều hòa." },
+            { kanji: "設備", reading: "せつび", hanviet: "THIẾT BỊ", meaning: "trang thiết bị, cơ sở vật chất", exJp: "最新の設備を導入する。", exVi: "Đưa vào áp dụng trang thiết bị mới nhất." },
+            { kanji: "設計する", reading: "せっけいする", hanviet: "THIẾT KẾ", meaning: "thiết kế", exJp: "家の設計をプロに頼む。", exVi: "Nhờ chuyên gia thiết kế ngôi nhà." },
+            { kanji: "生産する", reading: "せいさんする", hanviet: "SINH SẢN", meaning: "sản xuất", exJp: "米を tốn 大限に生産する。", exVi: "Sản xuất lúa gạo ở mức tối đa." },
+            { kanji: "製品", reading: "せいひん", hanviet: "CHẾ PHẨM", meaning: "sản phẩm, thành phẩm", exJp: "高品質な製品を ou 出する。", exVi: "Xuất khẩu các sản phẩm chất lượng cao." }
+        ];
+
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let score = 0;
+        let canInteract = true;
+
+        function startGame() {
+            const countVal = document.getElementById('select-count').value;
+            const modeVal = document.getElementById('select-mode').value;
+
+            let list = [...rawData].sort(() => Math.random() - 0.5);
+            let selectedCount = countVal === 'all' ? list.length : parseInt(countVal);
+            list = list.slice(0, Math.min(selectedCount, list.length));
+
+            currentQuestions = list.map(item => {
+                let isKanjiToReading = modeVal === 'kanji-to-reading' ? true :
+                                       modeVal === 'reading-to-kanji' ? false :
+                                       Math.random() < 0.5;
+
+                return {
+                    raw: item,
+                    question: isKanjiToReading ? item.kanji : item.reading,
+                    answer: isKanjiToReading ? item.reading : item.kanji,
+                    isKanjiToReading: isKanjiToReading
+                };
+            });
+
+            currentIndex = 0;
+            score = 0;
+            document.getElementById('setup-panel').style.display = 'none';
+            document.getElementById('game-panel').style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            canInteract = true;
+            document.getElementById('feedback').style.display = 'none';
+            const item = currentQuestions[currentIndex];
+
+            // Progress Bar & Count
+            const progressPercent = ((currentIndex) / currentQuestions.length) * 100;
+            document.getElementById('progress-fill').style.width = progressPercent + '%';
+            document.getElementById('q-count').innerText = `Câu ${currentIndex + 1} / ${currentQuestions.length}`;
+            document.getElementById('score-count').innerText = `Điểm: ${score}`;
+            document.getElementById('q-word').innerText = item.question;
+
+            const optionsBox = document.getElementById('options-box');
+            optionsBox.innerHTML = '';
+
+            let options = [item.answer];
+            while (options.length < 4) {
+                let randItem = rawData[Math.floor(Math.random() * rawData.length)];
+                let wrongAns = item.isKanjiToReading ? randItem.reading : randItem.kanji;
+                if (!options.includes(wrongAns) && wrongAns !== item.answer) {
+                    options.push(wrongAns);
+                }
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(btn, opt === item.answer);
+                optionsBox.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(btn, isCorrect) {
+            if (!canInteract) return;
+            canInteract = false;
+
+            const item = currentQuestions[currentIndex];
+            const statusEl = document.getElementById('result-status');
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                score += 10;
+                statusEl.innerHTML = `<span style="color: #4caf50;">✓ 正解 (Chính xác!)</span>`;
+            } else {
+                btn.classList.add('wrong');
+                statusEl.innerHTML = `<span style="color: #ef5350;">✕ ざんねん (Đáp án đúng là: ${item.answer})</span>`;
+            }
+
+            document.getElementById('exp-detail').innerText = `${item.raw.kanji} 【${item.raw.reading}】 : ${item.raw.meaning} (${item.raw.hanviet})`;
+            document.getElementById('exp-ex-jp').innerText = item.raw.exJp;
+            document.getElementById('exp-ex-vi').innerText = item.raw.exVi;
+            document.getElementById('score-count').innerText = `Điểm: ${score}`;
+            document.getElementById('feedback').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentIndex++;
+            if (currentIndex < currentQuestions.length) {
+                loadQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            document.getElementById('progress-fill').style.width = '100%';
+            document.getElementById('game-panel').style.display = 'none';
+            document.getElementById('result-panel').style.display = 'block';
+            document.getElementById('final-score').innerText = `${score} / ${currentQuestions.length * 10} ĐIỂM`;
+        }
+
+        function resetSetup() {
+            document.getElementById('result-panel').style.display = 'none';
+            document.getElementById('setup-panel').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
